@@ -36,7 +36,7 @@ data class Recipe(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY
 				  var image: Array<Byte> = emptyArray(),
 				  
 				  @OneToOne(cascade = arrayOf(CascadeType.ALL))
-				  var notes: Notes = Notes(),
+				  var notes: Notes? = null,
 				  
 				  @OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "recipe")
 				  var ingredients: Set<Ingredient> = emptySet(),

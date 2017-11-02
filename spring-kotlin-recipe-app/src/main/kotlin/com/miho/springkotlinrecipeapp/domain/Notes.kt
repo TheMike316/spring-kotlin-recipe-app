@@ -11,7 +11,7 @@ data class Notes(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)
 				 var id: Long = -1,
 				 
 				 @OneToOne
-				 var recipe: Recipe = Recipe(),
+				 var recipe: Recipe? = null,
 				 
 				 @Lob
 				 var recipeNotes: String = "")

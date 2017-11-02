@@ -17,7 +17,7 @@ data class Ingredient(@field: [Id  GeneratedValue(strategy = GenerationType.IDEN
 					  var amount: BigDecimal = BigDecimal.ZERO,
 					  
 					  @ManyToOne
-					  var recipe: Recipe = Recipe(),
+					  var recipe: Recipe? = null,
 					  
 					   @OneToOne
-					  var unitOfMeasure: UnitOfMeasure = UnitOfMeasure())
+					  var unitOfMeasure: UnitOfMeasure? = null)
