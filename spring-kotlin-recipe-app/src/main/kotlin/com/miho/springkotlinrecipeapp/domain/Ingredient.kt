@@ -9,5 +9,15 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 
 @Entity
-data class Ingredient(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null, var description: String, var amount: BigDecimal,
-					  @ManyToOne var recipe: Recipe, @OneToOne var unitOfMeasure: UnitOfMeasure)
+data class Ingredient(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
+					  var id: Long = -1,
+					  
+					  var description: String = "",
+					  					  
+					  var amount: BigDecimal = BigDecimal.ZERO,
+					  
+					  @ManyToOne
+					  var recipe: Recipe = Recipe(),
+					  
+					   @OneToOne
+					  var unitOfMeasure: UnitOfMeasure = UnitOfMeasure())
