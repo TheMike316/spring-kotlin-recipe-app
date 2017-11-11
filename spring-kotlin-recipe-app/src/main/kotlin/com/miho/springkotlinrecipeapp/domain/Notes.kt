@@ -7,11 +7,11 @@ import javax.persistence.Entity
 import javax.persistence.Lob
 
 @Entity
-data class Notes(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
-				 var id: Long = -1,
-				 
-				 @OneToOne
+class Notes(@OneToOne
 				 var recipe: Recipe? = null,
 				 
 				 @Lob
-				 var recipeNotes: String = "")
+				 var recipeNotes: String = "",
+				 
+				 @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
+				 var id: Long = -1)

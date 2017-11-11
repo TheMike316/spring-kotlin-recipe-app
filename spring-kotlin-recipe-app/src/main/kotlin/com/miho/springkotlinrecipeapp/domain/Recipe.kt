@@ -15,10 +15,7 @@ import javax.persistence.JoinTable
 import javax.persistence.JoinColumn
 
 @Entity
-data class Recipe(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
-				  var id: Long = -1,
-				  
-				  var description: String = "",
+class Recipe(var description: String = "",
 				  
 				  var prepTime: Int = 0,
 				  
@@ -30,6 +27,7 @@ data class Recipe(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY
 				  
 				  var url: String = "",
 				  
+			      @Lob
 				  var directions: String = "",
 				  
 				  @Lob
@@ -39,7 +37,7 @@ data class Recipe(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY
 				  var notes: Notes? = null,
 				  
 				  @OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "recipe")
-				  var ingredients: Set<Ingredient> = emptySet(),
+				  val ingredients: MutableSet<Ingredient> = mutableSetOf(),
 				  
 				  @Enumerated(EnumType.STRING)
 				  var difficulty: Difficulty = Difficulty.EASY,
@@ -47,4 +45,7 @@ data class Recipe(@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY
 				  @ManyToMany
 				  @JoinTable(name = "recipe_category", joinColumns = arrayOf(JoinColumn(name = "recipe_id")),
 						   inverseJoinColumns = arrayOf(JoinColumn(name = "category_id")))
-				  var categories: Set<Category> = emptySet()) 
+				  val categories: MutableSet<Category> = mutableSetOf(),
+				  
+				  @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
+				  var id: Long = -1) 

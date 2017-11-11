@@ -7,9 +7,10 @@ import javax.persistence.ManyToMany
 import javax.persistence.GenerationType
 
 @Entity
-data class Category (@field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
-					 var id: Long = -1,
+class Category (var description: String = "",
 					 
-					 var description: String = "",
+					 @ManyToMany(mappedBy = "categories")
+					 val recipes: MutableSet<Recipe> = mutableSetOf(),
 					 
-					 @ManyToMany(mappedBy = "categories") var recipes: Set<Recipe> = emptySet())
+					 @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
+					 var id: Long = -1)
