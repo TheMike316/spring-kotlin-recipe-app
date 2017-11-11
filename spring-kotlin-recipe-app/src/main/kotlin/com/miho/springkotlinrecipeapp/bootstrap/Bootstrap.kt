@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 
 //If you are here to evaluate my coding skills, please move along. There is nothing to see here in this class except horrendously ugly code.
 @Component
-class Bootstrap (private val categoryRepository: CategoryRepository,
+open class Bootstrap (private val categoryRepository: CategoryRepository,
 				 private val unitRepository: UnitOfMeasureRepository,
 				 private val recipeService: RecipeService) : InitializingBean {
 	
