@@ -13,12 +13,13 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 import com.miho.springkotlinrecipeapp.domain.UnitOfMeasure
 import java.util.function.BiFunction
+import com.miho.springkotlinrecipeapp.services.RecipeService
 
 //If you are here to evaluate my coding skills, please move along. There is nothing to see here in this class except horrendously ugly code.
 @Component
 class Bootstrap (private val categoryRepository: CategoryRepository,
 				 private val unitRepository: UnitOfMeasureRepository,
-				 private val recipeRepository: RecipeRepository) : InitializingBean {
+				 private val recipeService: RecipeService) : InitializingBean {
 	
 	override fun afterPropertiesSet(){
 		
@@ -28,7 +29,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val spicyChickenTacoRecipe = createTacoRecipe(units)
 		
-		recipeRepository.saveAll(listOf(guacaRecipe, spicyChickenTacoRecipe))
+		recipeService.saveAll(listOf(guacaRecipe, spicyChickenTacoRecipe))
 		
 	}
 	
@@ -41,7 +42,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val guacaRecipe = Recipe("How to Make Perfect Guacamole Recipe")
 		
-		val ingredients = createGuacaIngredients(guacaRecipe, units)
+		val ingredients = createGuacaIngredients(units)
 		
 		guacaRecipe.prepTime = 10
 		
@@ -49,9 +50,9 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		guacaRecipe.url = "http://www.simplyrecipes.com/recipes/perfect_guacamole/"
 		
-		guacaRecipe.ingredients.addAll(ingredients)		
+		guacaRecipe.addIngredients(ingredients)		
 		
-		guacaRecipe.categories.addAll(getCategories())
+		guacaRecipe.addCategories(getCategories())
 		
 		guacaRecipe.difficulty = Difficulty.EASY
 		
@@ -88,7 +89,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	private fun createGuacaIngredients(guacaRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
+	private fun createGuacaIngredients(units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
 		
 		val each = units.get("Each")
 		
@@ -98,21 +99,21 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val dash = units.get("Dash")
 		
-		val result = mutableSetOf(Ingredient("ripe avocados", BigDecimal(2), each, guacaRecipe))
+		val result = mutableSetOf(Ingredient("ripe avocados", BigDecimal(2), each))
 		
-		result.add(Ingredient("Kosher salt", BigDecimal(0.5), teaspoon, guacaRecipe))
+		result.add(Ingredient("Kosher salt", BigDecimal(0.5), teaspoon))
 		
-		result.add(Ingredient("fresh lime juice or lemon juice", BigDecimal.ONE, tablespoon, guacaRecipe))
+		result.add(Ingredient("fresh lime juice or lemon juice", BigDecimal.ONE, tablespoon))
 		
-		result.add(Ingredient("minced red onion or thinly sliced green onion", BigDecimal(2), tablespoon, guacaRecipe))
+		result.add(Ingredient("minced red onion or thinly sliced green onion", BigDecimal(2), tablespoon))
 		
-		result.add(Ingredient("serrano chiles, stems and seeds removed, minced", BigDecimal(2), each, guacaRecipe))
+		result.add(Ingredient("serrano chiles, stems and seeds removed, minced", BigDecimal(2), each))
 		
-		result.add(Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal(2), tablespoon, guacaRecipe))
+		result.add(Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal(2), tablespoon))
 		
-		result.add(Ingredient("freshly grated black pepper", BigDecimal.ONE, dash, guacaRecipe))
+		result.add(Ingredient("freshly grated black pepper", BigDecimal.ONE, dash))
 		
-		result.add(Ingredient("ripe Tomato, seeds and pulp removed, chopped", BigDecimal(0.5), each, guacaRecipe))
+		result.add(Ingredient("ripe Tomato, seeds and pulp removed, chopped", BigDecimal(0.5), each))
 		
 		return result
 		
@@ -135,7 +136,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val tacoRecipe = Recipe("Spicy Grilled Chicken Tacos")
 		
-		val ingredients = createTacoIngredients(tacoRecipe, units)
+		val ingredients = createTacoIngredients(units)
 		
 		tacoRecipe.prepTime = 20
 		
@@ -145,9 +146,9 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		tacoRecipe.url = "http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/"
 		
-		tacoRecipe.ingredients.addAll(ingredients)		
+		tacoRecipe.addIngredients(ingredients)		
 		
-		tacoRecipe.categories.addAll(getCategories())
+		tacoRecipe.addCategories(getCategories())
 		
 		tacoRecipe.difficulty = Difficulty.EASY
 		
@@ -201,7 +202,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	private fun createTacoIngredients(tacoRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
+	private fun createTacoIngredients(units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
 		
 		val each = units.get("Each")
 		
@@ -215,43 +216,43 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val pint = unitRepository.findByUnit("Pint")
 		
-		val result = mutableSetOf(Ingredient("ancho chili powder", BigDecimal(2),  tablespoon, tacoRecipe))
+		val result = mutableSetOf(Ingredient("ancho chili powder", BigDecimal(2),  tablespoon))
 		
-		result.add(Ingredient("died oregano", BigDecimal.ONE, teaspoon, tacoRecipe))
+		result.add(Ingredient("died oregano", BigDecimal.ONE, teaspoon))
 		
-		result.add(Ingredient("dried cumin", BigDecimal.ONE, teaspoon, tacoRecipe))
+		result.add(Ingredient("dried cumin", BigDecimal.ONE, teaspoon))
 		
-		result.add(Ingredient("sugar", BigDecimal.ONE, teaspoon, tacoRecipe))
+		result.add(Ingredient("sugar", BigDecimal.ONE, teaspoon))
 		
-		result.add(Ingredient("salt", BigDecimal(0.5), teaspoon, tacoRecipe))
+		result.add(Ingredient("salt", BigDecimal(0.5), teaspoon))
 		
-		result.add(Ingredient("garlic, finely chopped", BigDecimal.ONE, clove, tacoRecipe))
+		result.add(Ingredient("garlic, finely chopped", BigDecimal.ONE, clove))
 		
-		result.add(Ingredient("finely grated orange zest", BigDecimal.ONE, tablespoon, tacoRecipe))
+		result.add(Ingredient("finely grated orange zest", BigDecimal.ONE, tablespoon))
 		
-		result.add(Ingredient("fresh-squeezed orange juice", BigDecimal(3), tablespoon, tacoRecipe))
+		result.add(Ingredient("fresh-squeezed orange juice", BigDecimal(3), tablespoon))
 		
-		result.add(Ingredient("olive oil", BigDecimal(2), tablespoon, tacoRecipe))
+		result.add(Ingredient("olive oil", BigDecimal(2), tablespoon))
 		
-		result.add(Ingredient("skinless, boneless chicken thighs", BigDecimal(6), each, tacoRecipe))
+		result.add(Ingredient("skinless, boneless chicken thighs", BigDecimal(6), each))
 		
-		result.add(Ingredient("small corn tortillas", BigDecimal(8), each, tacoRecipe))
+		result.add(Ingredient("small corn tortillas", BigDecimal(8), each))
 		
-		result.add(Ingredient("packed baby arugula", BigDecimal(3), cup, tacoRecipe))
+		result.add(Ingredient("packed baby arugula", BigDecimal(3), cup))
 		
-		result.add(Ingredient("medium ripe avocados, sliced", BigDecimal(2), each, tacoRecipe))
+		result.add(Ingredient("medium ripe avocados, sliced", BigDecimal(2), each))
 		
-		result.add(Ingredient("radishes, thinly sliced", BigDecimal(4), each, tacoRecipe))
+		result.add(Ingredient("radishes, thinly sliced", BigDecimal(4), each))
 		
-		result.add(Ingredient("cherry tomatoes, halved", BigDecimal(0.5), pint, tacoRecipe))
+		result.add(Ingredient("cherry tomatoes, halved", BigDecimal(0.5), pint))
 		
-		result.add(Ingredient("red onion, thinly sliced", BigDecimal(0.25), each, tacoRecipe))
+		result.add(Ingredient("red onion, thinly sliced", BigDecimal(0.25), each))
 		
-		result.add(Ingredient("roughly chopped cilantro", BigDecimal.ONE, each, tacoRecipe))
+		result.add(Ingredient("roughly chopped cilantro", BigDecimal.ONE, each))
 		
-		result.add(Ingredient("sour cream thinned with 1/4 cup of milk", BigDecimal(0.5), cup, tacoRecipe))
+		result.add(Ingredient("sour cream thinned with 1/4 cup of milk", BigDecimal(0.5), cup))
 		
-		result.add(Ingredient("lime, cut into wedges", BigDecimal.ONE, each, tacoRecipe))
+		result.add(Ingredient("lime, cut into wedges", BigDecimal.ONE, each))
 		
 		return result
 	}

@@ -13,6 +13,7 @@ import javax.persistence.EnumType
 import javax.persistence.ManyToMany
 import javax.persistence.JoinTable
 import javax.persistence.JoinColumn
+import javax.persistence.FetchType
 
 @Entity
 class Recipe(var description: String = "",
@@ -32,20 +33,71 @@ class Recipe(var description: String = "",
 				  
 				  @Lob
 				  var image: Array<Byte> = emptyArray(),
+				 
+				  notes: Notes? = null,
 				  
-				  @OneToOne(cascade = arrayOf(CascadeType.ALL))
-				  var notes: Notes? = null,
-				  
-				  @OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "recipe")
-				  val ingredients: MutableSet<Ingredient> = mutableSetOf(),
+				  ingredients: MutableSet<Ingredient> = mutableSetOf(),
 				  
 				  @Enumerated(EnumType.STRING)
 				  var difficulty: Difficulty = Difficulty.EASY,
-				  
-				  @ManyToMany
+			 
+				  @ManyToMany(fetch = FetchType.EAGER)
 				  @JoinTable(name = "recipe_category", joinColumns = arrayOf(JoinColumn(name = "recipe_id")),
-						   inverseJoinColumns = arrayOf(JoinColumn(name = "category_id")))
+				  inverseJoinColumns = arrayOf(JoinColumn(name = "category_id")))
 				  val categories: MutableSet<Category> = mutableSetOf(),
 				  
 				  @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
-				  var id: Long = -1) 
+				  var id: Long = -1) {
+	
+	@OneToOne(cascade = arrayOf(CascadeType.ALL))
+	var notes: Notes? = null
+	set(notes: Notes?) {
+		
+		notes?.recipe = this
+		
+		field = notes
+	}
+	
+	@OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "recipe")
+	val ingredients: MutableSet<Ingredient> = mutableSetOf()
+	
+	init {
+		
+		this.notes = notes
+		
+		addIngredients(ingredients)
+		
+	}
+	
+	fun addIngredient(ingredient: Ingredient) {
+		
+		ingredient.recipe = this
+		
+		this.ingredients.add(ingredient) 
+		
+	}
+	
+	fun addIngredients(ingredients: Iterable<Ingredient>) = ingredients.forEach(this::addIngredient)
+	
+	fun removeIngredient(ingredient: Ingredient): Boolean {
+		
+		val result = ingredients.remove(ingredient)
+		
+		if (result)
+			ingredient.recipe = null
+		
+		return result
+		
+	}
+	
+	fun addCategory(category: Category) = categories.add(category)
+	
+	fun addCategories(categories: Iterable<Category>) = this.categories.addAll(categories)
+	
+	fun removeCategory(category: Category) = categories.remove(category)
+	
+	
+	
+	
+	
+}

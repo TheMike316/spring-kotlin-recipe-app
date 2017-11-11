@@ -13,4 +13,4 @@ class Category (var description: String = "",
 					 val recipes: MutableSet<Recipe> = mutableSetOf(),
 					 
 					 @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
-					 var id: Long = -1)
+					 var id: Long = -1) 
