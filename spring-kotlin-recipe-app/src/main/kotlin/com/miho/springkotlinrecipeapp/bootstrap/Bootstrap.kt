@@ -14,7 +14,7 @@ import java.math.BigDecimal
 import com.miho.springkotlinrecipeapp.domain.UnitOfMeasure
 import java.util.function.BiFunction
 
-//If you are here to evaluate my coding skills, please move along. There is nothing to see here in this class, except horrendosly ugly code.
+//If you are here to evaluate my coding skills, please move along. There is nothing to see here in this class except horrendously ugly code.
 @Component
 class Bootstrap (private val categoryRepository: CategoryRepository,
 				 private val unitRepository: UnitOfMeasureRepository,
@@ -32,12 +32,12 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	fun getUnits() = mapOf("Each" to unitRepository.findByUnit("Each"),
+	private fun getUnits() = mapOf("Each" to unitRepository.findByUnit("Each"),
 			               "Teaspoon" to unitRepository.findByUnit("Teaspoon"),
 			               "Tablespoon" to unitRepository.findByUnit("Tablespoon"),
 			               "Dash" to unitRepository.findByUnit("Dash"))
 	
-	fun createGuacaRecipe(units: Map<String, UnitOfMeasure?>): Recipe{
+	private fun createGuacaRecipe(units: Map<String, UnitOfMeasure?>): Recipe{
 		
 		val guacaRecipe = Recipe("How to Make Perfect Guacamole Recipe")
 		
@@ -88,7 +88,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	fun createGuacaIngredients(guacaRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
+	private fun createGuacaIngredients(guacaRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
 		
 		val each = units.get("Each")
 		
@@ -120,7 +120,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 	
 	
 	
-	fun getCategories(): Set<Category>{
+	private fun getCategories(): Set<Category>{
 		
 		val mexican = categoryRepository.findByDescription("Mexican")
 		
@@ -131,7 +131,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	fun createTacoRecipe(units: Map<String, UnitOfMeasure?>): Recipe{
+	private fun createTacoRecipe(units: Map<String, UnitOfMeasure?>): Recipe{
 		
 		val tacoRecipe = Recipe("Spicy Grilled Chicken Tacos")
 		
@@ -201,7 +201,7 @@ class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 	}
 	
-	fun createTacoIngredients(tacoRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
+	private fun createTacoIngredients(tacoRecipe: Recipe, units: Map<String, UnitOfMeasure?>): Set<Ingredient>{
 		
 		val each = units.get("Each")
 		
