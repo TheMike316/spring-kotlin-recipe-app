@@ -1,9 +1,9 @@
 package com.miho.springkotlinrecipeapp.services
 
+import com.miho.springkotlinrecipeapp.domain.Recipe
 import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 import org.springframework.stereotype.Service
-import com.miho.springkotlinrecipeapp.domain.Recipe
-import javax.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
