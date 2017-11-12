@@ -12,6 +12,10 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.anySet
 import org.mockito.Mockito.eq
 import com.miho.springkotlinrecipeapp.domain.Recipe
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
 
 
 class IndexControllerTest {
@@ -30,6 +34,17 @@ class IndexControllerTest {
 		MockitoAnnotations.initMocks(this)
 		
 		controller = IndexController(service!!)
+		
+	}
+	
+	@Test
+	fun testMockMVC(){
+		
+		val mockMVC = MockMvcBuilders.standaloneSetup(controller).build()
+		
+		mockMVC.perform(get("/"))
+		       .andExpect(status().isOk)
+		       .andExpect(view().name("index"))
 		
 	}
 	
