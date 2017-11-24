@@ -85,7 +85,9 @@ open class Bootstrap (private val categoryRepository: CategoryRepository,
 
                             "To extend a limited supply of avocados, add either sour cream or cottage cheese to your guacamole dip. Purists may be horrified, but so what? It tastes great.")
 		
-		guacaRecipe.notes = notes		
+		guacaRecipe.notes = notes
+		
+		guacaRecipe.source = "Simply Recipes"
 		
 		return guacaRecipe
 		
@@ -197,7 +199,10 @@ open class Bootstrap (private val categoryRepository: CategoryRepository,
 
                                       "You could also easily double or even triple this recipe for a larger party. A taco and a cold beer on a warm day? Now that’s living!")
 		
-		tacoRecipe.notes = notes		
+		tacoRecipe.notes = notes
+		
+		
+		tacoRecipe.source = "Simply Recipes"
 		
 		return tacoRecipe
 		

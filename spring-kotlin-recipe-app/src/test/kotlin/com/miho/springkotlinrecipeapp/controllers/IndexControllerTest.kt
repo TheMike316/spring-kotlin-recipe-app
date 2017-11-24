@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
 
 class IndexControllerTest {
 	
-	private var controller: IndexController? = null
+	private lateinit var controller: IndexController
 	
 	@Mock
 	private var model: Model? = null

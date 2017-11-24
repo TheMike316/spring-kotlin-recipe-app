@@ -21,5 +21,7 @@ class Ingredient(var description: String = "",
 	
 	 @ManyToOne
 	var recipe: Recipe? = null
+	
+	override fun toString() = "$amount ${unitOfMeasure?.unit} of $description"
 					  
 }

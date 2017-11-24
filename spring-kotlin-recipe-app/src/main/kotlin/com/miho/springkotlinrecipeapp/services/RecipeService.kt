@@ -6,5 +6,7 @@ interface RecipeService {
 	
 	fun getAllRecipes(): Set<Recipe>
 	
+	fun findById(id: Long): Recipe?
+	
 	fun saveAll(recipes: Iterable<Recipe>): Iterable<Recipe>
 }

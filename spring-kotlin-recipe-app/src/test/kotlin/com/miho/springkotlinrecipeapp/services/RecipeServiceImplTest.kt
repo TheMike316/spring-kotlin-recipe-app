@@ -7,9 +7,10 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import com.miho.springkotlinrecipeapp.domain.Recipe
 import org.mockito.Mockito.`when` as mockitoWhen
-import org.junit.Assert.assertEquals
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.times
+import org.junit.Assert.*
+import org.mockito.Mockito.*
+import org.mockito.Matchers.anyLong
+import java.util.Optional
 
 class RecipeServiceImplTest {
 	
@@ -39,6 +40,21 @@ class RecipeServiceImplTest {
 		assertEquals(recipes?.size, 1)
 		
 		verify(repository, times(1))?.findAll()
+		
+	}
+	
+	@Test
+	fun getRecipeById(){
+		val recipe = Recipe(id = 1L)
+		
+		mockitoWhen(repository?.findById(anyLong())).thenReturn(Optional.of(recipe))
+		
+		val recipeReturned = service?.findById(1L)
+		
+		assertNotNull("Null recipe returned", recipeReturned)
+		
+		verify(repository, times(1))?.findById(anyLong())
+		verify(repository, never())?.findAll()
 		
 	}
 	
