@@ -9,7 +9,7 @@ class NotesCommandToNotesTest {
 	@Before
 	fun setUp(){
 	
-		val noteConverter: NotesCommandToNotes
+		notesConverter = NotesCommandToNotes()
 	
 	}
 }

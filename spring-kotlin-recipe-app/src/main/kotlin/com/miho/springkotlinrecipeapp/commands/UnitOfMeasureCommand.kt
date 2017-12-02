@@ -1,3 +1,3 @@
 package com.miho.springkotlinrecipeapp.commands
 
-data class UnitOfMeasureCommand(val id: Long, val unit: String)
+data class UnitOfMeasureCommand(var id: Long, var unit: String)
