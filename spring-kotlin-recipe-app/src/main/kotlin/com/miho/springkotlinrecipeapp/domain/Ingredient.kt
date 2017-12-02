@@ -14,13 +14,14 @@ class Ingredient(var description: String = "",
 				 var amount: BigDecimal = BigDecimal.ZERO,
 				 
 				  @OneToOne
-				 var unitOfMeasure: UnitOfMeasure? = null,					  
+				 var unitOfMeasure: UnitOfMeasure? = null,
+				 
+				 @ManyToOne
+				 var recipe: Recipe? = null,				  
 				  
 				 @field: [Id  GeneratedValue(strategy = GenerationType.IDENTITY)]
 				 var id: Long = -1){
 	
-	 @ManyToOne
-	var recipe: Recipe? = null
 	
 	override fun toString() = "$amount ${unitOfMeasure?.unit} of $description"
 					  

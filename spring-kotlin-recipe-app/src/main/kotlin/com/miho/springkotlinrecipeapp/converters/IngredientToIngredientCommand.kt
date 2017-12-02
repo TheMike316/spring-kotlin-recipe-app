@@ -16,10 +16,8 @@ class IngredientToIngredientCommand (val unitConverter: UnitOfMeasureToUnitOfMea
 			return null;
 		
 		val convertedUnit = unitConverter.convert(source.unitOfMeasure)
-		
-		val unit = if (convertedUnit != null) convertedUnit else UnitOfMeasureCommand(-1, "")
-		
-		return IngredientCommand(source.id, source.description, source.amount, unit)
+				
+		return IngredientCommand(source.id, source.description, source.amount, convertedUnit)
 		
 		
 	}
