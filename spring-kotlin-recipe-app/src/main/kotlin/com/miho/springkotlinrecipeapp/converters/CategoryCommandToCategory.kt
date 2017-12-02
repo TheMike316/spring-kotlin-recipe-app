@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.stereotype.Component
 
 @Component
-class CategoryCommandToCategory (val recipeConverter: RecipeCommandToRecipe) : Converter<CategoryCommand, Category> {
+class CategoryCommandToCategory : Converter<CategoryCommand, Category> {
 	
 	@Synchronized
 	override fun convert(source: CategoryCommand?): Category?{
@@ -15,10 +15,7 @@ class CategoryCommandToCategory (val recipeConverter: RecipeCommandToRecipe) : C
 		if (source == null)
 			return null;
 		
-		return Category(source.description, source.recipes.asSequence().map { recipeConverter.convert(it) }
-																       .filter { it != null }
-																       .map { it as Recipe }
-																       .toMutableSet(), source.id)
+		return Category(description = source.description, id = source.id)
 		
 		
 	}

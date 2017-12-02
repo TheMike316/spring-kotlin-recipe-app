@@ -6,7 +6,7 @@ import com.miho.springkotlinrecipeapp.domain.Notes
 import org.springframework.stereotype.Component
 
 @Component
-class NotesCommandToNotes (val recipeConverter: RecipeCommandToRecipe) : Converter<NotesCommand, Notes> {
+class NotesCommandToNotes : Converter<NotesCommand, Notes> {
 	
 	@Synchronized
 	override fun convert(source: NotesCommand?): Notes?{
@@ -14,6 +14,6 @@ class NotesCommandToNotes (val recipeConverter: RecipeCommandToRecipe) : Convert
 		if (source == null)
 			return null
 		
-		return Notes(recipeConverter.convert(source.recipe), source.recipeNotes, source.id)
+		return Notes(recipeNotes = source.recipeNotes, id = source.id)
 	}
 }
