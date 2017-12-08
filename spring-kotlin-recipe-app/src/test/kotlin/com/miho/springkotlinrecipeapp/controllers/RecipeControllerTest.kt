@@ -15,10 +15,18 @@ import org.mockito.Matchers.anyLong
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
+import com.miho.springkotlinrecipeapp.commands.RecipeCommand
+import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
+import com.miho.springkotlinrecipeapp.commands.NotesCommand
+import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.domain.Difficulty
+import com.miho.springkotlinrecipeapp.commands.CategoryCommand
 
 class RecipeControllerTest {
 	
 	private lateinit var controller: RecipeController
+	
+	
 	
 	
 	@Mock
@@ -36,7 +44,9 @@ class RecipeControllerTest {
 	@Test
 	fun testGetRecipe(){
 		
-		val recipe = Recipe(id = 1L)
+		val recipe = RecipeCommand(id = 1L, description = "", prepTime = 0, cookTime = 0, servings = 0,
+				                   source = "", url = "", directions = "", notes = NotesCommand(1L, ""), ingredients = emptySet<IngredientCommand>().toMutableSet(),
+				                   difficulty = Difficulty.EASY, categories = emptySet<CategoryCommand>().toMutableSet())
 		
 		val mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
 		

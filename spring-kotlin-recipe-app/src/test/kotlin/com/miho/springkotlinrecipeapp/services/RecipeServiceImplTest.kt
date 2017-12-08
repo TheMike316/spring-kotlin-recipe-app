@@ -1,20 +1,40 @@
 package com.miho.springkotlinrecipeapp.services
 
-import org.junit.Test
-import org.junit.Before
-import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
+import com.miho.springkotlinrecipeapp.commands.CategoryCommand
+import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.commands.NotesCommand
+import com.miho.springkotlinrecipeapp.commands.RecipeCommand
+import com.miho.springkotlinrecipeapp.converters.CategoryCommandToCategory
+import com.miho.springkotlinrecipeapp.converters.CategoryToCategoryCommand
+import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
+import com.miho.springkotlinrecipeapp.converters.IngredientToIngredientCommand
+import com.miho.springkotlinrecipeapp.converters.NotesCommandToNotes
+import com.miho.springkotlinrecipeapp.converters.NotesToNotesCommand
+import com.miho.springkotlinrecipeapp.converters.RecipeCommandToRecipe
+import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
+import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure
+import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand
+import com.miho.springkotlinrecipeapp.domain.Difficulty
 import com.miho.springkotlinrecipeapp.domain.Recipe
-import org.mockito.Mockito.`when` as mockitoWhen
-import org.junit.Assert.*
-import org.mockito.Mockito.*
+import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Before
+import org.junit.Test
 import org.mockito.Matchers.anyLong
+import org.mockito.Mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 import java.util.Optional
+import org.mockito.Mockito.`when` as mockitoWhen
 
 class RecipeServiceImplTest {
 	
 	private var service: RecipeServiceImpl? = null
+	
+	
 	
 	@Mock
 	private var repository: RecipeRepository? = null
@@ -22,18 +42,40 @@ class RecipeServiceImplTest {
 	@Before
 	fun setUp(){
 		
-		MockitoAnnotations.initMocks(this)		
+		MockitoAnnotations.initMocks(this)
 		
-		service = RecipeServiceImpl(repository!!)
+		val notesToCommand = NotesToNotesCommand()
+		
+		val unitToCommand = UnitOfMeasureToUnitOfMeasureCommand()
+		
+		val ingredientToCommand = IngredientToIngredientCommand(unitToCommand)
+		
+		val categoryToCommand = CategoryToCategoryCommand()
+		
+		val recipeToCommand = RecipeToRecipeCommand(notesToCommand, ingredientToCommand, categoryToCommand)
+		
+		val commandToNotes= NotesCommandToNotes()
+		
+		val commandToUnit = UnitOfMeasureCommandToUnitOfMeasure()
+		
+		val commandToIngredient = IngredientCommandToIngredient(commandToUnit)
+		
+		val commandToCategory = CategoryCommandToCategory()
+		
+		val commandToRecipe = RecipeCommandToRecipe(commandToNotes, commandToIngredient, commandToCategory)
+		
+		service = RecipeServiceImpl(repository!!, recipeToCommand, commandToRecipe)
 		
 	}
 	
 	@Test
 	fun getRecipes(){
 		
-		val mockRecipes = setOf(Recipe())
+		val recipe = Recipe(id = 1L, description = "")
 		
-		mockitoWhen(service?.getAllRecipes()).thenReturn(mockRecipes)
+		val mockRecipes = setOf(recipe)
+		
+		mockitoWhen(repository?.findAll()).thenReturn(mockRecipes)
 		
 		val recipes = service?.getAllRecipes()
 		

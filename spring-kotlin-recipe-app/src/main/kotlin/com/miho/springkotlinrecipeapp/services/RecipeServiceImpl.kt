@@ -5,25 +5,65 @@ import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
+import com.miho.springkotlinrecipeapp.commands.RecipeCommand
+import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
+import com.miho.springkotlinrecipeapp.converters.RecipeCommandToRecipe
 
 @Service
 @Transactional
-open class RecipeServiceImpl(private val recipeRepository: RecipeRepository) : RecipeService {
-	
-	
-	override fun findById(id: Long): Recipe {
-		
-	val recipe = recipeRepository.findById(id)
-		
+open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, private val recipeToCommand: RecipeToRecipeCommand,
+							 private val commandToRecipe: RecipeCommandToRecipe) : RecipeService {
+
+
+	override fun findById(id: Long): RecipeCommand? {
+
+		val recipe = recipeRepository.findById(id)
+
 		if (recipe.isPresent)
-			return recipe.get()
-		
+			return recipeToCommand.convert(recipe.get())
+
 		throw RuntimeException("Recipe not found!")
-	
-		
+
+
 	}
-	
-	override fun getAllRecipes() = recipeRepository.findAll().toSet()
-	
-	override fun saveAll(recipes: Iterable<Recipe>) = recipeRepository.saveAll(recipes)
+
+	override fun getAllRecipes() = recipeRepository.findAll().asSequence().map(recipeToCommand::convert).filter { it != null }.map { it as RecipeCommand }.toSet()
+
+//	override fun getAllRecipes(): Set<RecipeCommand> {
+//
+//		val recipes: Iterable<Recipe> = recipeRepository.findAll()
+//
+//		val recipeCommands = mutableSetOf<RecipeCommand>()
+//		
+//		for (recipe: Recipe in recipes){
+//			
+//			val command = recipeToCommand.convert(recipe)
+//			
+//			if (command !=null)
+//				recipeCommands.add(command)
+//			
+//		}
+//
+//		return recipeCommands
+//
+//	}
+
+	override fun saveAll(recipes: Iterable<RecipeCommand>): Iterable<RecipeCommand> {
+
+		val savedRecipes = recipeRepository.saveAll(recipes.asSequence()
+				.map(commandToRecipe::convert)
+				.filter { it != null }
+				.map { it as Recipe }
+				.toList())
+
+		return savedRecipes.asSequence().map(recipeToCommand::convert).filter { it != null }.map { it as RecipeCommand }.toList()
+	}
+
+	override fun saveRecipe(recipeCommand: RecipeCommand): RecipeCommand? {
+
+		val savedRecipe = recipeRepository.save(commandToRecipe.convert(recipeCommand))
+
+		return recipeToCommand.convert(savedRecipe)
+
+	}
 }

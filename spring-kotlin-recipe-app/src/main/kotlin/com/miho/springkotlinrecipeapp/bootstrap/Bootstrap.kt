@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 open class Bootstrap (private val categoryRepository: CategoryRepository,
 				 private val unitRepository: UnitOfMeasureRepository,
-				 private val recipeService: RecipeService) : InitializingBean {
+				 private val recipeRepository: RecipeRepository) : InitializingBean {
 	
 	@Transactional
 	override fun afterPropertiesSet(){
@@ -31,7 +31,7 @@ open class Bootstrap (private val categoryRepository: CategoryRepository,
 		
 		val spicyChickenTacoRecipe = createTacoRecipe(units)
 		
-		recipeService.saveAll(listOf(guacaRecipe, spicyChickenTacoRecipe))
+		recipeRepository.saveAll(listOf(guacaRecipe, spicyChickenTacoRecipe))
 		
 	}
 	
