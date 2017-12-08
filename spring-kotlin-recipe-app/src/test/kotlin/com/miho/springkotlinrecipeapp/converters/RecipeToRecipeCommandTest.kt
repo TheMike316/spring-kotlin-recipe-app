@@ -78,7 +78,7 @@ class RecipeToRecipeCommandTest {
 		assertEquals(SERVINGS, command.servings)
 		assertEquals(SOURCE, command.source)
 		assertEquals(URL, command.url)
-		assertEquals(NOTES_ID, command.notes.id)
+		assertEquals(NOTES_ID, command.notes?.id)
 		assertEquals(2, command.categories.size)
 		assertEquals(2, command.ingredients.size)
 	}

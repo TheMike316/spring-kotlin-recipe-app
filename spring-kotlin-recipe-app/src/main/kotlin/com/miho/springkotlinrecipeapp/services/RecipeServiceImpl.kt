@@ -29,25 +29,6 @@ open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, pri
 
 	override fun getAllRecipes() = recipeRepository.findAll().asSequence().map(recipeToCommand::convert).filter { it != null }.map { it as RecipeCommand }.toSet()
 
-//	override fun getAllRecipes(): Set<RecipeCommand> {
-//
-//		val recipes: Iterable<Recipe> = recipeRepository.findAll()
-//
-//		val recipeCommands = mutableSetOf<RecipeCommand>()
-//		
-//		for (recipe: Recipe in recipes){
-//			
-//			val command = recipeToCommand.convert(recipe)
-//			
-//			if (command !=null)
-//				recipeCommands.add(command)
-//			
-//		}
-//
-//		return recipeCommands
-//
-//	}
-
 	override fun saveAll(recipes: Iterable<RecipeCommand>): Iterable<RecipeCommand> {
 
 		val savedRecipes = recipeRepository.saveAll(recipes.asSequence()
