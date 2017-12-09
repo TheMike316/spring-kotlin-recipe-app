@@ -57,7 +57,7 @@ class RecipeControllerTest {
 		
 		mockitoWhen(service?.findById(anyLong()))?.thenReturn(recipe)
 		
-		mockMvc.perform(get("/recipe/show/1")).andExpect(status().isOk).andExpect(view().name("recipe/show"))
+		mockMvc.perform(get("/recipe/1/show")).andExpect(status().isOk).andExpect(view().name("recipe/show"))
 		
 		
 	}
@@ -84,8 +84,22 @@ class RecipeControllerTest {
 				.param("id", "2")
 				.param("description", ""))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/recipe/show/2"))
+				.andExpect(view().name("redirect:/recipe/2/show"))
 		
+		
+	}
+	
+	@Test
+	fun testGetUpdateView(){
+		
+		val command = RecipeCommand(id = 2L)
+		
+		mockitoWhen(service?.findById(anyLong())).thenReturn(command)
+		
+		mockMvc.perform(get("/recipe/2/update"))
+		   		.andExpect(status().isOk)
+		   		.andExpect(view().name("recipe/recipeform"))
+		   		.andExpect(model().attributeExists("recipe"))
 		
 	}
 }
