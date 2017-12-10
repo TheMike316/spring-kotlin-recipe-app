@@ -100,4 +100,15 @@ class RecipeServiceImplTest {
 		
 	}
 	
+	@Test
+	fun deleteById(){
+		
+		val idToDelete = 2L
+		
+		service?.deleteById(idToDelete)
+		
+		verify(repository, times(1))?.deleteById(anyLong())
+		
+	}
+	
 }

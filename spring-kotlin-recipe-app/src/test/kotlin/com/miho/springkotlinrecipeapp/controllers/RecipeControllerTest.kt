@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.mockito.Mockito.`when` as mockitoWhen
 import org.mockito.Matchers
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 
 class RecipeControllerTest {
 	
@@ -102,4 +104,15 @@ class RecipeControllerTest {
 		   		.andExpect(model().attributeExists("recipe"))
 		
 	}
+	
+	@Test
+	fun testDeletAction(){
+		
+		mockMvc.perform(get("/recipe/1/delete"))
+				.andExpect(status().is3xxRedirection)
+				.andExpect(view().name("redirect:/"))
+		
+		verify(service, times(1))?.deleteById(anyLong())
+	}
 }
+

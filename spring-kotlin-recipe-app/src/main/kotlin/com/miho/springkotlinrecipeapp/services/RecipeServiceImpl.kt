@@ -47,4 +47,6 @@ open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, pri
 		return recipeToCommand.convert(savedRecipe)
 
 	}
+	
+	override fun deleteById(id: Long) = recipeRepository.deleteById(id)
 }
