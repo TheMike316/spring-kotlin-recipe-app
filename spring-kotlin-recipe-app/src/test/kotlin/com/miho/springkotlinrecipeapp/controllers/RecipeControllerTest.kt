@@ -29,10 +29,7 @@ class RecipeControllerTest {
 	
 	private lateinit var controller: RecipeController
 	
-	private lateinit var mockMvc: MockMvc
-	
-	
-	
+	private lateinit var mockMvc: MockMvc	
 	
 	@Mock
 	private var service: RecipeService? = null

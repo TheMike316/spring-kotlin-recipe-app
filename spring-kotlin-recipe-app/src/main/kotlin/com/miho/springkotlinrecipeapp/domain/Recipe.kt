@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany
 import javax.persistence.JoinTable
 import javax.persistence.JoinColumn
 import javax.persistence.FetchType
+import javax.persistence.OrderBy
 
 @Entity
 class Recipe(var description: String = "",
@@ -59,6 +60,7 @@ class Recipe(var description: String = "",
 	}
 	
 	@OneToMany(cascade = arrayOf(CascadeType.ALL), mappedBy = "recipe")
+	@OrderBy("id")
 	val ingredients: MutableSet<Ingredient> = mutableSetOf()
 	
 	init {
