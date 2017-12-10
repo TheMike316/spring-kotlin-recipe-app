@@ -47,7 +47,7 @@
 								<tr th:each="recipe : ${recipes}">
 									<td th:text="${recipe.id}">123</td>
 									<td th:text="${recipe.description}">Tasty Goodness</td>
-									<td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}"><span class="glyphicon glyphicon-info-sign"></span></a>
+									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}"><span class="glyphicon glyphicon-info-sign"></span></a>
 									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}"><span class="glyphicon glyphicon-pencil"></span></a>
 									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}"><span class="glyphicon glyphicon-remove"></span></a>
 								</tr>
