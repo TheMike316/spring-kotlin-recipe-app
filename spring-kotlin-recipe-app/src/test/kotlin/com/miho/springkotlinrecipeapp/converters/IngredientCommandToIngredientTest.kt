@@ -35,7 +35,7 @@ class IngredientCommandToIngredientTest {
 	@Test
 	@Throws(Exception::class)
 	fun testEmptyObject() {
-		assertNotNull(converter!!.convert(IngredientCommand(1, "", BigDecimal.ZERO, UnitOfMeasureCommand(1, ""))))
+		assertNotNull(converter!!.convert(IngredientCommand(id = 1, description = "", amount = BigDecimal.ZERO, unitOfMeasure = UnitOfMeasureCommand(1, ""))))
 	}
 
 	@Test
@@ -44,7 +44,7 @@ class IngredientCommandToIngredientTest {
 //given
 		
 		val unitOfMeasureCommand = UnitOfMeasureCommand(UOM_ID, "")
-		val command = IngredientCommand(ID_VALUE, DESCRIPTION, AMOUNT, unitOfMeasureCommand)
+		val command = IngredientCommand(id = ID_VALUE, description =  DESCRIPTION, amount = AMOUNT, unitOfMeasure = unitOfMeasureCommand)
 //when
 		val ingredient = converter!!.convert(command)
 //then
@@ -61,7 +61,7 @@ class IngredientCommandToIngredientTest {
 	fun convertWithNullUOM() {
 //given
 		
-		val command = IngredientCommand(ID_VALUE, DESCRIPTION, AMOUNT)
+		val command = IngredientCommand(id = ID_VALUE, description = DESCRIPTION, amount = AMOUNT)
 //when
 		val ingredient = converter!!.convert(command)
 //then

@@ -66,8 +66,8 @@ class RecipeCommandToRecipeTest {
 
 		val uom = UnitOfMeasureCommand(1, "")
 
-		val ingredient = IngredientCommand(INGRED_ID_1, "", BigDecimal.ONE, uom)
-		val ingredient2 = IngredientCommand(INGRED_ID_2, "", BigDecimal.ONE, uom)
+		val ingredient = IngredientCommand(id = INGRED_ID_1, description = "", amount = BigDecimal.ONE, unitOfMeasure = uom)
+		val ingredient2 = IngredientCommand(id = INGRED_ID_2, description = "", amount = BigDecimal.ONE, unitOfMeasure = uom)
 
 		val ingredients = mutableSetOf(ingredient, ingredient2)
 

@@ -17,7 +17,7 @@ class IngredientToIngredientCommand (val unitConverter: UnitOfMeasureToUnitOfMea
 		
 		val convertedUnit = unitConverter.convert(source.unitOfMeasure)
 				
-		return IngredientCommand(source.id, source.description, source.amount, convertedUnit)
+		return IngredientCommand(id = source.id, description = source.description, amount = source.amount, unitOfMeasure = convertedUnit)
 		
 		
 	}

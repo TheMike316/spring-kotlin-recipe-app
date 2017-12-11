@@ -51,4 +51,9 @@ class IngredientControllerTest {
 		verify(service, times(1)).findById(anyLong())
 		
 	}
+	
+	@Test
+	fun testShowIngredient(){
+//		TODO
+	}
 }
