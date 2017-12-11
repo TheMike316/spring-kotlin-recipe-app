@@ -14,6 +14,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
+
 
 class IngredientControllerTest {
 	
@@ -44,6 +47,8 @@ class IngredientControllerTest {
 				.andExpect(status().isOk)
 				.andExpect(view().name("recipe/ingredient/list"))
 				.andExpect(model().attributeExists("recipe"))
+		
+		verify(service, times(1)).findById(anyLong())
 		
 	}
 }
