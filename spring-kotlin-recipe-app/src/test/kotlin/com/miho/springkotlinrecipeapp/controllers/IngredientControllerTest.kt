@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.services.IngredientService
 
 
 class IngredientControllerTest {
@@ -25,13 +27,16 @@ class IngredientControllerTest {
 	private lateinit var mockMvc: MockMvc	
 	
 	@Mock
-	private lateinit var service: RecipeService
+	private lateinit var recipeService: RecipeService
+	
+	@Mock
+	private lateinit var ingredientService: IngredientService
 	
 	@Before
 	fun startUp(){
 		MockitoAnnotations.initMocks(this)
 		
-		controller = IngredientController(service)
+		controller = IngredientController(recipeService, ingredientService)
 		
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
 	}
@@ -40,7 +45,7 @@ class IngredientControllerTest {
 	fun testListIngredients(){
 //		given
 		val recipeCommand = RecipeCommand()
-		mockitoWhen(service.findById(anyLong())).thenReturn(recipeCommand)
+		mockitoWhen(recipeService.findById(anyLong())).thenReturn(recipeCommand)
 		
 //		when
 		mockMvc.perform(get("/recipe/1/ingredients"))
@@ -48,12 +53,22 @@ class IngredientControllerTest {
 				.andExpect(view().name("recipe/ingredient/list"))
 				.andExpect(model().attributeExists("recipe"))
 		
-		verify(service, times(1)).findById(anyLong())
+		verify(recipeService, times(1)).findById(anyLong())
 		
 	}
 	
 	@Test
 	fun testShowIngredient(){
-//		TODO
+//		given
+		val ingredientCommand = IngredientCommand(id = 2L)
+		
+//		when
+		mockitoWhen(ingredientService.findByRecipeIdAndId(anyLong(), anyLong())).thenReturn(ingredientCommand)
+		
+//		then
+		mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+				.andExpect(status().isOk)
+				.andExpect(view().name("recipe/ingredient/show"))
+				.andExpect(model().attributeExists("ingredient"))
 	}
 }
