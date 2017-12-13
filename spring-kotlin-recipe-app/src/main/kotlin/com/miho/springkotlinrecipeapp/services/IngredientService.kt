@@ -4,5 +4,5 @@ import com.miho.springkotlinrecipeapp.commands.IngredientCommand
 
 interface IngredientService {
 
-	fun findByRecipeIdAndId(recipeId: Long, id: Long): IngredientCommand?
+	fun findByRecipeIdAndIngredientId(recipeId: Long, id: Long): IngredientCommand?
 }

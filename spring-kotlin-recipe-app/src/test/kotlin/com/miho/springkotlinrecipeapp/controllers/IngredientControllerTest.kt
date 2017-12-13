@@ -63,7 +63,7 @@ class IngredientControllerTest {
 		val ingredientCommand = IngredientCommand(id = 2L)
 		
 //		when
-		mockitoWhen(ingredientService.findByRecipeIdAndId(anyLong(), anyLong())).thenReturn(ingredientCommand)
+		mockitoWhen(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand)
 		
 //		then
 		mockMvc.perform(get("/recipe/1/ingredient/2/show"))

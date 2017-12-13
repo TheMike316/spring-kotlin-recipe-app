@@ -21,7 +21,7 @@ class IngredientController (private val recipeService: RecipeService, private va
 	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
 	fun showById(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String{
 		
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndId(recipeId.toLong(), ingredientId.toLong()))
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId.toLong(), ingredientId.toLong()))
 		
 		return "recipe/ingredient/show"
 	}

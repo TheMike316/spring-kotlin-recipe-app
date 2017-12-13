@@ -8,7 +8,7 @@ import com.miho.springkotlinrecipeapp.converters.IngredientToIngredientCommand
 @Service
 class IngredientServiceImpl(private val ingredientRepository: IngredientRepository, private val ingredientToCommand: IngredientToIngredientCommand) : IngredientService {
 
-	override fun findByRecipeIdAndId(recipeId: Long, id: Long): IngredientCommand? {
+	override fun findByRecipeIdAndIngredientId(recipeId: Long, id: Long): IngredientCommand? {
 		
 		val ingredient = ingredientRepository.findByRecipeIdAndId(recipeId, id)
 		

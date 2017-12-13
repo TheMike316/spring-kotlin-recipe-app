@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository
 import com.miho.springkotlinrecipeapp.domain.Ingredient
 
 @Repository
-interface IngredientRepository : CrudRepository<Long, Ingredient> {
+interface IngredientRepository : CrudRepository<Ingredient, Long> {
 	
 	fun findByRecipeIdAndId(recipeId: Long, id: Long): Ingredient?
 }
