@@ -35,7 +35,7 @@ class IngredientServiceImplTest {
 		
 		
 	}
-	
+	 
 	@Test
 	fun testFindByRecipeIdAndIngredientId(){
 //		given
