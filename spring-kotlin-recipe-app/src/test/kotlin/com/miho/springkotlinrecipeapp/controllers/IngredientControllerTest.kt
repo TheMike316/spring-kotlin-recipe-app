@@ -18,6 +18,8 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import com.miho.springkotlinrecipeapp.commands.IngredientCommand
 import com.miho.springkotlinrecipeapp.services.IngredientService
+import com.miho.springkotlinrecipeapp.services.UnitOfMeasureService
+import com.miho.springkotlinrecipeapp.commands.UnitOfMeasureCommand
 
 
 class IngredientControllerTest {
@@ -32,12 +34,15 @@ class IngredientControllerTest {
 	@Mock
 	private lateinit var ingredientService: IngredientService
 	
+	@Mock
+	private lateinit var uomService: UnitOfMeasureService
+	
 	@Before
 	fun startUp(){
 		MockitoAnnotations.initMocks(this)
 		
-		controller = IngredientController(recipeService, ingredientService)
-		
+		controller = IngredientController(recipeService, ingredientService, uomService)
+	
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
 	}
 	
@@ -70,5 +75,25 @@ class IngredientControllerTest {
 				.andExpect(status().isOk)
 				.andExpect(view().name("recipe/ingredient/show"))
 				.andExpect(model().attributeExists("ingredient"))
+	}
+	
+	@Test
+	fun testGetUpdateForm(){
+//		given
+		val ingredientCommand = IngredientCommand(id = 3)
+		val uoms = setOf(UnitOfMeasureCommand(id = 1), UnitOfMeasureCommand(id = 2), UnitOfMeasureCommand(id = 3))
+		
+//		when
+		mockitoWhen(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand)
+		mockitoWhen(uomService.listAllUoms()).thenReturn(uoms)
+		
+//		then
+		mockMvc.perform(get("/recipe/2/ingredient/3/update"))
+				.andExpect(status().isOk)
+				.andExpect(view().name("recipe/ingredient/ingredientform"))
+				.andExpect(model().attributeExists("ingredient"))
+				.andExpect(model().attributeExists("uomList"))
+
+		
 	}
 }
