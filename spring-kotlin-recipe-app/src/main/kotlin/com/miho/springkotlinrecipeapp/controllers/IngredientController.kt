@@ -1,13 +1,16 @@
 package com.miho.springkotlinrecipeapp.controllers
 
+import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.services.IngredientService
 import com.miho.springkotlinrecipeapp.services.RecipeService
+import com.miho.springkotlinrecipeapp.services.UnitOfMeasureService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import com.miho.springkotlinrecipeapp.services.IngredientService
 import org.springframework.web.bind.annotation.GetMapping
-import com.miho.springkotlinrecipeapp.services.UnitOfMeasureService
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 class IngredientController (private val recipeService: RecipeService,
@@ -40,6 +43,16 @@ class IngredientController (private val recipeService: RecipeService,
 		model.addAttribute("uomList", uomService.listAllUoms())
 		
 		return "recipe/ingredient/ingredientform"
+		
+	}
+	
+	@PostMapping
+	@RequestMapping("/recipe/{recipeId}/ingredient")
+	fun update(@ModelAttribute ingredient: IngredientCommand, @PathVariable recipeId: String): String{
+		
+		val savedIngredient = ingredientService.saveIngredient(ingredient)
+		
+		return "redirect:/recipe/$recipeId/ingredient/${savedIngredient.id}/show"
 		
 	}
 }

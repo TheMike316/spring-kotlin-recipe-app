@@ -14,6 +14,8 @@ import org.mockito.Matchers.anyLong
 import org.junit.Assert.assertEquals
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
+import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure
 
 class IngredientServiceImplTest {
 	
@@ -31,7 +33,11 @@ class IngredientServiceImplTest {
 		
 		val ingredientToCommand = IngredientToIngredientCommand(unitToCommand)
 		
-		ingredientService = IngredientServiceImpl(ingredientRepository, ingredientToCommand)		
+		val commandToUnit = UnitOfMeasureCommandToUnitOfMeasure()
+		
+		val commandToIngredient = IngredientCommandToIngredient(commandToUnit)
+		
+		ingredientService = IngredientServiceImpl(ingredientRepository, ingredientToCommand, commandToIngredient)		
 		
 		
 	}
