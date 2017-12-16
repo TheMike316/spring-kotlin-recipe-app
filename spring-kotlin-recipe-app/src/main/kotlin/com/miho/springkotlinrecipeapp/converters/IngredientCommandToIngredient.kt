@@ -16,6 +16,6 @@ class IngredientCommandToIngredient (val unitConverter: UnitOfMeasureCommandToUn
 			return null
 		
 		return Ingredient(description = source.description, amount = source.amount, unitOfMeasure = unitConverter.convert(source.unitOfMeasure),
-						  id = source.id, recipe = Recipe(id = source.id))
+						  id = source.id, recipe = Recipe(id = source.recipeId))
 	}
 }
