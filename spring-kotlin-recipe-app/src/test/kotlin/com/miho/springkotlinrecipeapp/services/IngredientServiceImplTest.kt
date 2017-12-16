@@ -16,6 +16,7 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
 import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure
+import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 
 class IngredientServiceImplTest {
 	
@@ -23,6 +24,7 @@ class IngredientServiceImplTest {
 	
 	@Mock
 	private lateinit var ingredientRepository: IngredientRepository
+	
 	
 	@Before
 	fun setUp(){
