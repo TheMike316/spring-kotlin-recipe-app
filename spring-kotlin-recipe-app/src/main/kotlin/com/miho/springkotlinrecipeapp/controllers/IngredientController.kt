@@ -1,6 +1,7 @@
 package com.miho.springkotlinrecipeapp.controllers
 
 import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.commands.UnitOfMeasureCommand
 import com.miho.springkotlinrecipeapp.services.IngredientService
 import com.miho.springkotlinrecipeapp.services.RecipeService
 import com.miho.springkotlinrecipeapp.services.UnitOfMeasureService
@@ -13,46 +14,62 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
-class IngredientController (private val recipeService: RecipeService,
-							private val ingredientService: IngredientService, private val uomService: UnitOfMeasureService) {
-	
+class IngredientController(private val recipeService: RecipeService,
+						   private val ingredientService: IngredientService, private val uomService: UnitOfMeasureService) {
+
 	@GetMapping
 	@RequestMapping("/recipe/{id}/ingredients")
-	fun getIngredientList(@PathVariable id: String, model: Model): String{
-		
+	fun getIngredientList(@PathVariable id: String, model: Model): String {
+
 		model.addAttribute("recipe", recipeService.findById(id.toLong()))
-		
+
 		return "recipe/ingredient/list"
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
-	fun showById(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String{
-		
+	fun showById(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String {
+
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId.toLong(), ingredientId.toLong()))
-		
+
 		return "recipe/ingredient/show"
 	}
-	
+
 	@GetMapping
 	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
 	fun updateIngredient(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String {
-		
+
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId.toLong(), ingredientId.toLong()))
-		
+
 		model.addAttribute("uomList", uomService.listAllUoms())
-		
+
 		return "recipe/ingredient/ingredientform"
-		
+
 	}
-	
+
+	@GetMapping
+	@RequestMapping("/recipe/{recipeId}/ingredient/new")
+	fun newIngredient(@PathVariable recipeId: String, model: Model): String {
+
+		val recipeCommand = recipeService.findById(recipeId.toLong())
+//		TODO raise Exception if null
+
+		if (recipeCommand != null)
+			model.addAttribute("ingredient", IngredientCommand(recipeId = recipeCommand.id, unitOfMeasure = UnitOfMeasureCommand()))
+
+		model.addAttribute("uomList", uomService.listAllUoms())
+
+		return "recipe/ingredient/ingredientform"
+
+	}
+
 	@PostMapping
 	@RequestMapping("/recipe/{recipeId}/ingredient")
-	fun update(@ModelAttribute ingredient: IngredientCommand, @PathVariable recipeId: String): String{
-		
-		val savedIngredient = ingredientService.saveIngredient(ingredient)
-		
+	fun saveOrUpdate(@ModelAttribute ingredient: IngredientCommand, @PathVariable recipeId: String): String {
+
+		val savedIngredient = ingredientService.saveOrUpdateIngredient(ingredient)
+
 		return "redirect:/recipe/$recipeId/ingredient/${savedIngredient.id}/show"
-		
+
 	}
 }

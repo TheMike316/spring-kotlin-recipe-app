@@ -25,6 +25,9 @@ class IngredientServiceImplTest {
 	@Mock
 	private lateinit var ingredientRepository: IngredientRepository
 	
+	@Mock
+	private lateinit var recipeRepository: RecipeRepository
+	
 	
 	@Before
 	fun setUp(){
@@ -39,7 +42,7 @@ class IngredientServiceImplTest {
 		
 		val commandToIngredient = IngredientCommandToIngredient(commandToUnit)
 		
-		ingredientService = IngredientServiceImpl(ingredientRepository, ingredientToCommand, commandToIngredient)		
+		ingredientService = IngredientServiceImpl(ingredientRepository, recipeRepository, ingredientToCommand, commandToIngredient)		
 		
 		
 	}

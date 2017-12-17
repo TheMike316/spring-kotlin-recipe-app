@@ -110,7 +110,7 @@ class IngredientControllerTest {
 		val recipeId = 1
 		
 //		when
-		mockitoWhen(ingredientService.saveIngredient(any())).thenReturn(ingredientCommand)
+		mockitoWhen(ingredientService.saveOrUpdateIngredient(any())).thenReturn(ingredientCommand)
 		
 //		then
 		mockMvc.perform(post("/recipe/$recipeId/ingredient")
@@ -124,4 +124,22 @@ class IngredientControllerTest {
 		
 	}
 	
+	@Test
+	fun testNewIngredientForm(){
+		
+//		given
+		val recipeCommand = RecipeCommand(id = 1)
+		
+//		when
+		mockitoWhen(recipeService.findById(anyLong())).thenReturn(recipeCommand)
+		mockitoWhen(uomService.listAllUoms()).thenReturn(emptySet())
+		
+//		then
+		mockMvc.perform(get("/recipe/1/ingredient/new"))
+				.andExpect(status().isOk)
+				.andExpect(view().name("recipe/ingredient/ingredientform"))
+				.andExpect(model().attributeExists("ingredient"))
+				.andExpect(model().attributeExists("uomList"))
+		
+	}
 }

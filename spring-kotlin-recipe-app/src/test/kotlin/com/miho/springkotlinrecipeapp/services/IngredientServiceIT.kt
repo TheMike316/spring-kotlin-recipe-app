@@ -1,16 +1,19 @@
 package com.miho.springkotlinrecipeapp.services
 
+import com.miho.springkotlinrecipeapp.commands.IngredientCommand
+import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
+import com.miho.springkotlinrecipeapp.converters.IngredientToIngredientCommand
+import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
+import com.miho.springkotlinrecipeapp.repositories.IngredientRepository
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import com.miho.springkotlinrecipeapp.repositories.IngredientRepository
-import org.springframework.beans.factory.annotation.Autowired
-import com.miho.springkotlinrecipeapp.converters.IngredientToIngredientCommand
-import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
 import org.springframework.transaction.annotation.Transactional
-import org.junit.Test
-import org.junit.Assert.*
-import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
+import java.math.BigDecimal
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -35,6 +38,9 @@ open class IngredientServiceIT {
 
 	@Autowired
 	private lateinit var recipeToCommand: RecipeToRecipeCommand
+	
+	@Autowired
+	private lateinit var uomService: UnitOfMeasureService
 
 	@Transactional
 	@Test
@@ -47,7 +53,7 @@ open class IngredientServiceIT {
 
 //		when
 		ingredientCommand?.description = NEW_DESCRIPTION
-		val savedIngredientCommand = ingredientService.saveIngredient(ingredientCommand)
+		val savedIngredientCommand = ingredientService.saveOrUpdateIngredient(ingredientCommand)
 		val recipeCommandAfterUpdate = recipeService.findById(savedIngredientCommand.recipeId)
 
 		//		then
@@ -62,7 +68,34 @@ open class IngredientServiceIT {
 		assertEquals(recipeCommandBeforeUpdate?.description, recipeCommandAfterUpdate?.description)
 		assertEquals(recipeCommandBeforeUpdate?.categories, recipeCommandAfterUpdate?.categories)
 		assertEquals(recipeCommandBeforeUpdate?.difficulty, recipeCommandAfterUpdate?.difficulty)
+		assertEquals(recipeCommandBeforeUpdate?.ingredients?.size, recipeCommandAfterUpdate?.ingredients?.size)
+		assert(recipeCommandAfterUpdate?.ingredients?.indexOf(savedIngredientCommand) != -1)
 
 
+	}
+	
+	@Transactional
+	@Test
+	fun testNewIngredient(){
+		
+//		given
+		val uom = uomService.listAllUoms().iterator().next()
+		val recipe = recipeService.getAllRecipes().iterator().next()
+		val newIngredientCommand = IngredientCommand(description = "new ingredient", recipeId = recipe.id, unitOfMeasure = uom, amount = BigDecimal.ONE)
+		
+//		when
+		val savedIngredientCommand = ingredientService.saveOrUpdateIngredient(newIngredientCommand)
+		val recipeCommand = recipeService.findById(recipe.id)
+		
+		
+//		then
+		assertNotNull(savedIngredientCommand)
+		assertNotNull(savedIngredientCommand.id)
+		assertEquals(savedIngredientCommand.recipeId, recipe.id)
+		assertEquals(savedIngredientCommand.description, newIngredientCommand.description)
+		assertEquals(savedIngredientCommand.unitOfMeasure, newIngredientCommand.unitOfMeasure)
+		assertEquals(savedIngredientCommand.amount, newIngredientCommand.amount)
+		assert(savedIngredientCommand.id != newIngredientCommand.id)
+		assert(recipeCommand?.ingredients?.indexOf(savedIngredientCommand) != -1 )
 	}
 }

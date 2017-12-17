@@ -6,5 +6,5 @@ interface IngredientService {
 
 	fun findByRecipeIdAndIngredientId(recipeId: Long, id: Long): IngredientCommand?
 	
-	fun saveIngredient(ingredientCommand: IngredientCommand?): IngredientCommand
+	fun saveOrUpdateIngredient(ingredientCommand: IngredientCommand?): IngredientCommand
 }
