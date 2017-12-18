@@ -94,8 +94,10 @@
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
                                 <div class="col-md-1">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
-                                </div>
+									<a 
+										th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}"><span
+										class="glyphicon glyphicon-pencil" style="color: #ffffff"></span></a>
+								</div>
                             </div>
                         </div>
                         <div class="panel-body">
