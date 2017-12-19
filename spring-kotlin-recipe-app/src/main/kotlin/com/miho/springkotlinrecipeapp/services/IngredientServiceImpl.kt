@@ -72,4 +72,17 @@ open class IngredientServiceImpl(private val ingredientRepository: IngredientRep
 
 		return savedCommand
 	}
+
+	@Transactional
+	override fun deleteById(recipeId: Long, ingredientId: Long) {
+
+		val recipeOpt = recipeRepository.findById(recipeId)
+
+		if (recipeOpt.isPresent && recipeOpt.get().ingredients.firstOrNull { it.id == ingredientId } != null)
+			ingredientRepository.deleteById(ingredientId)
+		
+		else
+			throw RuntimeException("Internal Error")
+
+	}
 }

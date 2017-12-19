@@ -17,6 +17,7 @@ import org.mockito.Mockito.verify
 import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
 import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure
 import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
+import java.util.Optional
 
 class IngredientServiceImplTest {
 	
@@ -69,4 +70,33 @@ class IngredientServiceImplTest {
 		assertEquals(1L, ingredientCommand?.recipeId)
 		verify(ingredientRepository, times(1)).findByRecipeIdAndId(anyLong(), anyLong())
 	}
+	
+	@Test
+	fun testDeleteByIdHappyPath(){
+		
+//		given
+		val ingredient = Ingredient(id = 2)
+		val recipe = Recipe(id = 1, ingredients = mutableSetOf(ingredient))
+	
+//	 	when
+		mockitoWhen(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe))
+		ingredientService.deleteById(recipe.id, ingredient.id)
+		
+//		then
+		verify(ingredientRepository, times(1)).deleteById(anyLong())
+	}
+	
+	@Test(expected=RuntimeException::class)
+	fun testDeleteByIdSadPath(){
+//		given
+		val recipe = Recipe (id = 2)
+		val ingredientId = 2L
+	
+//	 	when
+		mockitoWhen(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe))
+		ingredientService.deleteById(recipe.id, ingredientId)
+		
+//		then expected exception is thrown
+	}
+	
 }

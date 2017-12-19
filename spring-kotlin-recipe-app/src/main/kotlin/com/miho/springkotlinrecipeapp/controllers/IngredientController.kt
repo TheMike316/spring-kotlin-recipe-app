@@ -72,4 +72,13 @@ class IngredientController(private val recipeService: RecipeService,
 		return "redirect:/recipe/$recipeId/ingredient/${savedIngredient.id}/show"
 
 	}
+	
+	@GetMapping
+	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
+	fun delete(@PathVariable recipeId: String, @PathVariable ingredientId: String): String {
+		
+		ingredientService.deleteById(recipeId.toLong() ,ingredientId.toLong())
+		
+		return "redirect:/recipe/$recipeId/ingredients"
+	}
 }
