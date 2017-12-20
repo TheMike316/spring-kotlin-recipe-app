@@ -98,4 +98,36 @@ open class IngredientServiceIT {
 		assert(savedIngredientCommand.id != newIngredientCommand.id)
 		assert(recipeCommand?.ingredients?.indexOf(savedIngredientCommand) != -1 )
 	}
+	
+	@Transactional
+	@Test
+	fun testDeleteIngredientHappyPath(){
+		
+//		given
+		val recipe = recipeService.getAllRecipes().iterator().next()
+		val ingredient = recipe.ingredients.iterator().next()
+		val recipeId = recipe.id
+		val ingredientId = ingredient.id
+		
+//		when
+		ingredientService.deleteById(recipeId, ingredientId)
+		
+//		then no exception is thrown
+	}
+	
+	@Transactional
+	@Test (expected = RuntimeException::class)
+	fun testDeleteIngredientSadPath(){
+		
+//		given
+		val recipe = recipeService.getAllRecipes().iterator().next()
+		val ingredient = recipe.ingredients.iterator().next()
+		val recipeId = recipe.id + 10000
+		val ingredientId = ingredient.id
+		
+//		when
+		ingredientService.deleteById(recipeId, ingredientId)
+		
+//		then an exception is thrown
+	}
 }
