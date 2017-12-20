@@ -38,7 +38,7 @@ open class IngredientServiceIT {
 
 	@Autowired
 	private lateinit var recipeToCommand: RecipeToRecipeCommand
-	
+
 	@Autowired
 	private lateinit var uomService: UnitOfMeasureService
 
@@ -63,7 +63,7 @@ open class IngredientServiceIT {
 		assertEquals(ingredient.recipe?.id, savedIngredientCommand.recipeId)
 		assertEquals(ingredient.unitOfMeasure?.id, savedIngredientCommand.unitOfMeasure?.id)
 		assertEquals(ingredient.amount, savedIngredientCommand.amount)
-		
+
 		assertEquals(recipeCommandBeforeUpdate?.id, recipeCommandAfterUpdate?.id)
 		assertEquals(recipeCommandBeforeUpdate?.description, recipeCommandAfterUpdate?.description)
 		assertEquals(recipeCommandBeforeUpdate?.categories, recipeCommandAfterUpdate?.categories)
@@ -73,21 +73,21 @@ open class IngredientServiceIT {
 
 
 	}
-	
+
 	@Transactional
 	@Test
-	fun testNewIngredient(){
-		
+	fun testNewIngredient() {
+
 //		given
 		val uom = uomService.listAllUoms().iterator().next()
 		val recipe = recipeService.getAllRecipes().iterator().next()
 		val newIngredientCommand = IngredientCommand(description = "new ingredient", recipeId = recipe.id, unitOfMeasure = uom, amount = BigDecimal.ONE)
-		
+
 //		when
 		val savedIngredientCommand = ingredientService.saveOrUpdateIngredient(newIngredientCommand)
 		val recipeCommand = recipeService.findById(recipe.id)
-		
-		
+
+
 //		then
 		assertNotNull(savedIngredientCommand)
 		assertNotNull(savedIngredientCommand.id)
@@ -96,38 +96,47 @@ open class IngredientServiceIT {
 		assertEquals(savedIngredientCommand.unitOfMeasure, newIngredientCommand.unitOfMeasure)
 		assertEquals(savedIngredientCommand.amount, newIngredientCommand.amount)
 		assert(savedIngredientCommand.id != newIngredientCommand.id)
-		assert(recipeCommand?.ingredients?.indexOf(savedIngredientCommand) != -1 )
+		assert(recipeCommand?.ingredients?.indexOf(savedIngredientCommand) != -1)
 	}
-	
+
 	@Transactional
 	@Test
-	fun testDeleteIngredientHappyPath(){
-		
+	fun testDeleteIngredientHappyPath() {
+
 //		given
 		val recipe = recipeService.getAllRecipes().iterator().next()
 		val ingredient = recipe.ingredients.iterator().next()
 		val recipeId = recipe.id
 		val ingredientId = ingredient.id
-		
+
 //		when
 		ingredientService.deleteById(recipeId, ingredientId)
+
+		var deletedIngredient: IngredientCommand? = null
 		
-//		then no exception is thrown
+		try {
+			deletedIngredient = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)
+		} catch (e: RuntimeException) {
+//			do nothing
+		}
+
+//		then
+		assertEquals(null, deletedIngredient)
 	}
-	
+
 	@Transactional
-	@Test (expected = RuntimeException::class)
-	fun testDeleteIngredientSadPath(){
-		
+	@Test(expected = RuntimeException::class)
+	fun testDeleteIngredientSadPath() {
+
 //		given
 		val recipe = recipeService.getAllRecipes().iterator().next()
 		val ingredient = recipe.ingredients.iterator().next()
 		val recipeId = recipe.id + 10000
 		val ingredientId = ingredient.id
-		
+
 //		when
 		ingredientService.deleteById(recipeId, ingredientId)
-		
+
 //		then an exception is thrown
 	}
 }

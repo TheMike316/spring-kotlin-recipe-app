@@ -78,10 +78,16 @@ open class IngredientServiceImpl(private val ingredientRepository: IngredientRep
 
 		val recipeOpt = recipeRepository.findById(recipeId)
 
-		if (recipeOpt.isPresent && recipeOpt.get().ingredients.firstOrNull { it.id == ingredientId } != null)
+		if (recipeOpt.isPresent && recipeOpt.get().ingredients.firstOrNull { it.id == ingredientId } != null){
+			
+			recipeOpt.get().ingredients.removeIf{ it.id == ingredientId }
+			
+			recipeRepository.save(recipeOpt.get())
+			
 			ingredientRepository.deleteById(ingredientId)
 		
-		else
+			
+		}else
 			throw RuntimeException("Internal Error")
 
 	}
