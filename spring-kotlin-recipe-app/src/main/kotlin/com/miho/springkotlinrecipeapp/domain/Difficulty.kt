@@ -1,5 +1,5 @@
 package com.miho.springkotlinrecipeapp.domain
 
 enum class Difficulty {
-	EASY, MODERATE, HARD
+	EASY, MODERATE, KIND_OF_HARD, HARD
 }
