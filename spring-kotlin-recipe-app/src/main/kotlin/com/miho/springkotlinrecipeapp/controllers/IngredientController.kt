@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
+@RequestMapping("/recipe")
 class IngredientController(private val recipeService: RecipeService,
 						   private val ingredientService: IngredientService, private val uomService: UnitOfMeasureService) {
 
-	@GetMapping
-	@RequestMapping("/recipe/{id}/ingredients")
+	@GetMapping("/{id}/ingredients")
 	fun getIngredientList(@PathVariable id: String, model: Model): String {
 
 		model.addAttribute("recipe", recipeService.findById(id.toLong()))
@@ -26,8 +26,7 @@ class IngredientController(private val recipeService: RecipeService,
 		return "recipe/ingredient/list"
 	}
 
-	@GetMapping
-	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
+	@GetMapping("/{recipeId}/ingredient/{ingredientId}/show")
 	fun showById(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String {
 
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId.toLong(), ingredientId.toLong()))
@@ -35,8 +34,7 @@ class IngredientController(private val recipeService: RecipeService,
 		return "recipe/ingredient/show"
 	}
 
-	@GetMapping
-	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
+	@GetMapping("/{recipeId}/ingredient/{ingredientId}/update")
 	fun updateIngredient(@PathVariable recipeId: String, @PathVariable ingredientId: String, model: Model): String {
 
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId.toLong(), ingredientId.toLong()))
@@ -47,8 +45,7 @@ class IngredientController(private val recipeService: RecipeService,
 
 	}
 
-	@GetMapping
-	@RequestMapping("/recipe/{recipeId}/ingredient/new")
+	@GetMapping("/{recipeId}/ingredient/new")
 	fun newIngredient(@PathVariable recipeId: String, model: Model): String {
 
 		val recipeCommand = recipeService.findById(recipeId.toLong())
@@ -63,8 +60,7 @@ class IngredientController(private val recipeService: RecipeService,
 
 	}
 
-	@PostMapping
-	@RequestMapping("/recipe/{recipeId}/ingredient")
+	@PostMapping("/{recipeId}/ingredient")
 	fun saveOrUpdate(@ModelAttribute ingredient: IngredientCommand, @PathVariable recipeId: String): String {
 
 		val savedIngredient = ingredientService.saveOrUpdateIngredient(ingredient)
@@ -73,8 +69,7 @@ class IngredientController(private val recipeService: RecipeService,
 
 	}
 	
-	@GetMapping
-	@RequestMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
+	@GetMapping("/{recipeId}/ingredient/{ingredientId}/delete")
 	fun delete(@PathVariable recipeId: String, @PathVariable ingredientId: String): String {
 		
 		ingredientService.deleteById(recipeId.toLong() ,ingredientId.toLong())
