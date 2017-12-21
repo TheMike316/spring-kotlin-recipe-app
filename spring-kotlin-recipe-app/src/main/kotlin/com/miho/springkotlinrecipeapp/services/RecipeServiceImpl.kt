@@ -40,11 +40,16 @@ open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, pri
 		return savedRecipes.asSequence().map(recipeToCommand::convert).filter { it != null }.map { it as RecipeCommand }.toList()
 	}
 
-	override fun saveRecipe(recipeCommand: RecipeCommand): RecipeCommand? {
+	override fun saveRecipe(recipeCommand: RecipeCommand): RecipeCommand {
 
 		val savedRecipe = recipeRepository.save(commandToRecipe.convert(recipeCommand))
 
-		return recipeToCommand.convert(savedRecipe)
+		val recipeCommand = recipeToCommand.convert(savedRecipe)
+		
+		if (recipeCommand == null)
+			throw RuntimeException("internal Error")
+		
+		return recipeCommand
 
 	}
 	
