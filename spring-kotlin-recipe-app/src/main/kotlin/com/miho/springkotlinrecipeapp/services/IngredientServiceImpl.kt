@@ -41,7 +41,7 @@ open class IngredientServiceImpl(private val ingredientRepository: IngredientRep
 		val recipeOptional = recipeRepository.findById(ingredientCommand?.recipeId)
 
 		if (!recipeOptional.isPresent)
-			throw RuntimeException("Internal Error")
+			throw RuntimeException("Recipe not found")
 
 		recipeOptional.get().addIngredient(ingredient)
 

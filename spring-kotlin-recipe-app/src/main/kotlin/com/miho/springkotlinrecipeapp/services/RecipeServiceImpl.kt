@@ -44,12 +44,12 @@ open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, pri
 
 		val savedRecipe = recipeRepository.save(commandToRecipe.convert(recipeCommand))
 
-		val recipeCommand = recipeToCommand.convert(savedRecipe)
+		val savedRecipeCommand = recipeToCommand.convert(savedRecipe)
 		
-		if (recipeCommand == null)
+		if (savedRecipeCommand == null)
 			throw RuntimeException("internal Error")
 		
-		return recipeCommand
+		return savedRecipeCommand
 
 	}
 	

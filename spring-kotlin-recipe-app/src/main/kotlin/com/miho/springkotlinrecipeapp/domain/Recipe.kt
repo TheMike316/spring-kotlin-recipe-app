@@ -33,7 +33,7 @@ class Recipe(var description: String = "",
 				  var directions: String = "",
 				  
 				  @Lob
-				  var image: Array<Byte> = emptyArray(),
+				  var image: ByteArray = byteArrayOf(),
 				 
 				  notes: Notes? = null,
 				  
