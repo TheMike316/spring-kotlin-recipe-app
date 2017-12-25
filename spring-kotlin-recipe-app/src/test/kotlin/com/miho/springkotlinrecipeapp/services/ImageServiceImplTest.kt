@@ -20,6 +20,7 @@ import com.miho.springkotlinrecipeapp.converters.UnitOfMeasureCommandToUnitOfMea
 import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 import java.util.Optional
 import org.springframework.mock.web.MockMultipartFile
+import org.mockito.ArgumentCaptor
 
 class ImageServiceImplTest {
 	
@@ -47,13 +48,16 @@ class ImageServiceImplTest {
 		
 		mockitoWhen(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe))
 		mockitoWhen(recipeRepository.save(any<Recipe>())).thenReturn(recipe)
+		val argumentCaptor = ArgumentCaptor.forClass(Recipe::class.java)
 		
 //		when
 		imageService.saveImageFile(recipeId, file)
 		
 //		then
 		verify(recipeRepository, times(1)).findById(anyLong())
-		verify(recipeRepository, times(1)).save(any())
+		verify(recipeRepository, times(1)).save(argumentCaptor.capture())
+		val savedRecipe = argumentCaptor.value
+		assertEquals(file.bytes.size, savedRecipe.image.size)
 		
 		
 	}
