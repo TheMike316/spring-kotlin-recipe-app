@@ -7,7 +7,7 @@ import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ImageServiceImpl(private val recipeRepository: RecipeRepository): ImageService {
+open class ImageServiceImpl(private val recipeRepository: RecipeRepository): ImageService {
 	
 	@Transactional
 	override fun saveImageFile(recipeId: Long, image: MultipartFile?) {
