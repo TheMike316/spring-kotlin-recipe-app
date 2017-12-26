@@ -30,7 +30,7 @@ class RecipeToRecipeCommand (val notesConverter: NotesToNotesCommand,
 				            source.difficulty, source.categories.asSequence().map { categoryConverter.convert(it) }
 				                                                             .filter { it != null }
 				                                                             .map { it as CategoryCommand }
-				                                                             .toMutableSet(), source.id )
+				                                                             .toMutableSet(), source.image, source.id )
 		
 		
 	}

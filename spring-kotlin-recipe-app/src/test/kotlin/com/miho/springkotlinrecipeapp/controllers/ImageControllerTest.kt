@@ -20,60 +20,85 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.mockito.Mockito.`when` as mockitoWhen
+import org.junit.Assert.assertEquals
 
 class ImageControllerTest {
-	
+
 	@Mock
 	private lateinit var imageService: ImageService
-	
+
 	@Mock
 	private lateinit var recipeService: RecipeService
 
 	private lateinit var controller: ImageController
-	
+
 	private lateinit var mockMvc: MockMvc
-	
+
 	@Before
-	fun setUp(){
-		
+	fun setUp() {
+
 		MockitoAnnotations.initMocks(this)
-		
+
 		controller = ImageController(recipeService, imageService)
-		
+
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build()
-		
+
 	}
-	
+
 	@Test
-	fun testFormGet(){
+	fun testFormGet() {
 //		given
 		val recipeCommand = RecipeCommand(id = 1)
-		
+
 		mockitoWhen(recipeService.findById(anyLong())).thenReturn(recipeCommand)
-		
+
 //		when
 		mockMvc.perform(get("/recipe/1/image"))
 				.andExpect(status().isOk)
 				.andExpect(view().name("imageuploadform"))
 				.andExpect(model().attributeExists("recipe"))
-		
+
 //		then
 		verify(recipeService, times(1)).findById(anyLong())
 	}
-	
+
 	@Test
-	fun testImagePost(){
+	fun testImagePost() {
 //		given
 		val file = MockMultipartFile("imagefile", "test.txt", "text/plain", "Mike kicks ass".byteInputStream())
-	
+
 //		when
 		mockMvc.perform(multipart("/recipe/1/image/upload").file(file))
 				.andExpect(status().is3xxRedirection)
 				.andExpect(view().name("redirect:/recipe/1/show"))
-		
+
 //		then
 		verify(imageService, times(1)).saveImageFile(anyLong(), any())
-	
+
+	}
+
+	@Test
+	fun testRenderImageFromDb() {
+
+//		given
+		val s = "fake image text"
+
+		val bytes: ByteArray = s.byteInputStream().use { it.readBytes() }		
+		
+		val recipeCommand = RecipeCommand(id = 1, image = bytes)
+
+
+		mockitoWhen(recipeService.findById(anyLong())).thenReturn(recipeCommand)
+
+//		when
+		val response = mockMvc.perform(get("/recipe/1/recipeimage"))
+				.andExpect(status().isOk)
+				.andReturn().getResponse()
+
+		val responseBytes = response.contentAsByteArray
+
+		assertEquals(bytes.size, responseBytes.size)
+
 	}
 
 }

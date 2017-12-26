@@ -23,6 +23,7 @@ class RecipeToRecipeCommandTest {
 	private val INGRED_ID_1 = 3L
 	private val INGRED_ID_2 = 4L
 	private val NOTES_ID = 9L
+	private val IMAGE = "some fake image".byteInputStream().use { it.readBytes() }
 
 	private var converter: RecipeToRecipeCommand? = null
 
@@ -63,7 +64,7 @@ class RecipeToRecipeCommandTest {
 		val ingredients = mutableSetOf(ingredient, ingredient2)
 		
 		val recipe = Recipe(id = RECIPE_ID, cookTime = COOK_TIME, prepTime = PREP_TIME, description = DESCRIPTION, difficulty = DIFFICULTY,
-				directions = DIRECTIONS, servings = SERVINGS, source = SOURCE, url = URL, notes = notes, categories = categories, ingredients = ingredients)
+				directions = DIRECTIONS, servings = SERVINGS, source = SOURCE, url = URL, notes = notes, categories = categories, ingredients = ingredients, image = IMAGE)
 		
 //when
 		val command = converter!!.convert(recipe)
@@ -81,6 +82,7 @@ class RecipeToRecipeCommandTest {
 		assertEquals(NOTES_ID, command.notes?.id)
 		assertEquals(2, command.categories.size)
 		assertEquals(2, command.ingredients.size)
+		assertEquals(IMAGE.size, command.image.size)
 	}
 
 

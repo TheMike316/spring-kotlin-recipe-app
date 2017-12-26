@@ -71,7 +71,8 @@ class RecipeCommandToRecipeTest {
 
 		val ingredients = mutableSetOf(ingredient, ingredient2)
 
-		val recipeCommand = RecipeCommand(DESCRIPTION, PREP_TIME, COOK_TIME, SERVINGS, SOURCE, URL, DIRECTIONS, notes, ingredients, DIFFICULTY, categories, RECIPE_ID)
+		val recipeCommand = RecipeCommand(description = DESCRIPTION, prepTime = PREP_TIME, cookTime = COOK_TIME, servings = SERVINGS, source = SOURCE, url = URL,
+				 directions = DIRECTIONS, notes = notes, ingredients = ingredients, difficulty = DIFFICULTY, categories = categories, id = RECIPE_ID)
 
 
 //when

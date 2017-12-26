@@ -76,14 +76,14 @@ class RecipeControllerTest {
 		
 		val command = RecipeCommand(id = 2L)
 		
-		mockitoWhen(service?.saveRecipe(command)).thenReturn(command)
+		mockitoWhen(service?.saveRecipe(any<RecipeCommand>())).thenReturn(command)
 		
 		mockMvc.perform(post("/recipe")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-				.param("id", "2")
+				.param("id", command.id.toString())
 				.param("description", ""))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/recipe/2/show"))
+				.andExpect(view().name("redirect:/recipe/${command.id}/show"))
 		
 		
 	}

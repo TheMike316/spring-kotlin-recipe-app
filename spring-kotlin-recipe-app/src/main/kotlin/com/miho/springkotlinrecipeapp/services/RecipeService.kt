@@ -11,7 +11,7 @@ interface RecipeService {
 	
 	fun saveAll(recipes: Iterable<RecipeCommand>): Iterable<RecipeCommand>
 	
-	fun saveRecipe(recipeCommand: RecipeCommand): RecipeCommand?
+	fun saveRecipe(recipeCommand: RecipeCommand?): RecipeCommand?
 	
 	fun deleteById(id: Long)
 }
