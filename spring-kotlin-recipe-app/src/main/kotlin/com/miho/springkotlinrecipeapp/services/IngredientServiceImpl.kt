@@ -7,6 +7,7 @@ import com.miho.springkotlinrecipeapp.converters.IngredientToIngredientCommand
 import com.miho.springkotlinrecipeapp.converters.IngredientCommandToIngredient
 import org.springframework.transaction.annotation.Transactional
 import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
+import com.miho.springkotlinrecipeapp.exceptions.NotFoundException
 
 @Service
 open class IngredientServiceImpl(private val ingredientRepository: IngredientRepository, private val recipeRepository: RecipeRepository,
@@ -17,7 +18,7 @@ open class IngredientServiceImpl(private val ingredientRepository: IngredientRep
 		val ingredient = ingredientRepository.findByRecipeIdAndId(recipeId, id)
 
 		if (ingredient == null)
-			throw RuntimeException("Ingredient not found!")
+			throw NotFoundException("Ingredient not found!")
 
 		return ingredientToCommand.convert(ingredient)
 	}
@@ -41,7 +42,7 @@ open class IngredientServiceImpl(private val ingredientRepository: IngredientRep
 		val recipeOptional = recipeRepository.findById(ingredientCommand?.recipeId)
 
 		if (!recipeOptional.isPresent)
-			throw RuntimeException("Recipe not found")
+			throw NotFoundException("Recipe not found")
 
 		recipeOptional.get().addIngredient(ingredient)
 

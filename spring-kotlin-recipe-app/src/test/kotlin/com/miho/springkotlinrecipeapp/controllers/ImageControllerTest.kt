@@ -55,7 +55,7 @@ class ImageControllerTest {
 //		when
 		mockMvc.perform(get("/recipe/1/image"))
 				.andExpect(status().isOk)
-				.andExpect(view().name("imageuploadform"))
+				.andExpect(view().name("recipe/imageuploadform"))
 				.andExpect(model().attributeExists("recipe"))
 
 //		then

@@ -8,6 +8,7 @@ import java.lang.RuntimeException
 import com.miho.springkotlinrecipeapp.commands.RecipeCommand
 import com.miho.springkotlinrecipeapp.converters.RecipeToRecipeCommand
 import com.miho.springkotlinrecipeapp.converters.RecipeCommandToRecipe
+import com.miho.springkotlinrecipeapp.exceptions.NotFoundException
 
 @Service
 @Transactional
@@ -22,7 +23,7 @@ open class RecipeServiceImpl(private val recipeRepository: RecipeRepository, pri
 		if (recipe.isPresent)
 			return recipeToCommand.convert(recipe.get())
 
-		throw RuntimeException("Recipe not found!")
+		throw NotFoundException("Recipe not found!")
 
 
 	}

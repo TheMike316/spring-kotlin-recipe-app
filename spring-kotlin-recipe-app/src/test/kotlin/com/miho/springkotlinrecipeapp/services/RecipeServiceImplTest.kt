@@ -29,6 +29,7 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import java.util.Optional
 import org.mockito.Mockito.`when` as mockitoWhen
+import com.miho.springkotlinrecipeapp.exceptions.NotFoundException
 
 class RecipeServiceImplTest {
 	
@@ -109,6 +110,19 @@ class RecipeServiceImplTest {
 		
 		verify(repository, times(1))?.deleteById(anyLong())
 		
+	}
+	
+	@Test(expected = NotFoundException::class)
+	fun testFindByIdNotFound(){
+//		given
+		val recipeOptional: Optional<Recipe> = Optional.empty()
+		
+		mockitoWhen(repository?.findById(anyLong())).thenReturn(recipeOptional)
+		
+//		when
+		service?.findById(4)
+		
+//		should go boom
 	}
 	
 }

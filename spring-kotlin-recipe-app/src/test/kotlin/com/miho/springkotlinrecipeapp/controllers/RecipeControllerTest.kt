@@ -24,6 +24,7 @@ import org.mockito.Mockito.`when` as mockitoWhen
 import org.mockito.Matchers
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import com.miho.springkotlinrecipeapp.exceptions.NotFoundException
 
 class RecipeControllerTest {
 	
@@ -59,6 +60,15 @@ class RecipeControllerTest {
 		mockMvc.perform(get("/recipe/1/show")).andExpect(status().isOk).andExpect(view().name("recipe/show"))
 		
 		
+	}
+	
+	@Test
+	fun testGetRecipeNotFound(){
+		
+		mockitoWhen(service?.findById(anyLong())).thenThrow(NotFoundException::class.java)
+		
+		mockMvc.perform(get("/recipe/4/show"))
+				.andExpect(status().isNotFound)
 	}
 	
 	@Test

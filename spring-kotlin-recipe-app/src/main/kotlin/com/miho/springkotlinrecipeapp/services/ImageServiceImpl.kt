@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import com.miho.springkotlinrecipeapp.repositories.RecipeRepository
 import org.springframework.transaction.annotation.Transactional
+import com.miho.springkotlinrecipeapp.exceptions.NotFoundException
 
 @Service
 open class ImageServiceImpl(private val recipeRepository: RecipeRepository): ImageService {
@@ -18,7 +19,7 @@ open class ImageServiceImpl(private val recipeRepository: RecipeRepository): Ima
 		val recipeOpt = recipeRepository.findById(recipeId)
 		
 		if (!recipeOpt.isPresent)
-			throw RuntimeException("Recipe not found")
+			throw NotFoundException("Recipe not found")
 		
 		recipeOpt.get().image = image.bytes
 		
