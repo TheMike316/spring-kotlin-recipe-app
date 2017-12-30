@@ -73,5 +73,16 @@ class RecipeController(private val recipeService: RecipeService) {
 		return modelAndView
 
 	}
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(NumberFormatException::class)
+	fun handleNumberFormatException(e: Exception): ModelAndView {
+
+		val modelAndView = ModelAndView("400error")
+		
+		modelAndView.addObject("exception", e)
+		
+		return modelAndView
+
+	}
 
 }
