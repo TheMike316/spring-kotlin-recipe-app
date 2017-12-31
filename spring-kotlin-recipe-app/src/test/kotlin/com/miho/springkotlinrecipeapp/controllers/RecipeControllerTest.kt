@@ -102,9 +102,30 @@ class RecipeControllerTest {
 		mockMvc.perform(post("/recipe")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 				.param("id", command.id.toString())
-				.param("description", ""))
+				.param("description", "assduff")
+				.param("prepTime", "4")
+				.param("cookTime", "30")
+				.param("servings", "4")
+				.param("directions", "asdf"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/recipe/${command.id}/show"))
+
+
+	}
+	
+	@Test
+	fun testPostNewRecipeFormFailValidation() {
+
+		val command = RecipeCommand(id = 2L)
+
+		mockitoWhen(service?.saveRecipe(any<RecipeCommand>())).thenReturn(command)
+
+		mockMvc.perform(post("/recipe")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", command.id.toString())
+				.param("description", ""))
+				.andExpect(status().isOk)
+				.andExpect(view().name("recipe/recipeform"))
 
 
 	}

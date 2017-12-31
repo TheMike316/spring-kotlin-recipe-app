@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.ModelAndView
+import javax.validation.Valid
+import org.springframework.validation.BindingResult
 
 @Controller
 @RequestMapping("/recipe")
@@ -38,9 +40,12 @@ class RecipeController(private val recipeService: RecipeService) {
 	}
 
 	@PostMapping("")
-	fun saveOrUpdate(@ModelAttribute command: RecipeCommand): String {
+	fun saveOrUpdate(@Valid @ModelAttribute("recipe") recipe: RecipeCommand, bindingResult: BindingResult): String {
+		
+		if (bindingResult.hasErrors())
+			return "recipe/recipeform"
 
-		val savedCommand = recipeService.saveRecipe(command)
+		val savedCommand = recipeService.saveRecipe(recipe)
 
 		return "redirect:/recipe/${savedCommand?.id}/show"
 	}
