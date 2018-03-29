@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://192.168.99.100:3307/recipeapp?autoReconnect=true&useSSL=false
+    username: sfg_dev_user
+    password: ${RECIPE_MARIADB_DEV_PW}
+    platform: mariadb
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: create
+              create-target: recipe_database_create.sql

@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://192.168.99.100:3308/sfg_prod
+    username: sfg_prod_user
+    password: ${RECIPE_MARIADB_PROD_PW}
+    platform: mariadb
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MariaDBDialect
